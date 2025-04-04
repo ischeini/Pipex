@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-static pid_t	ft_pipex(pid_t pid, int f_fd, int c_fd;)
+static pid_t	ft_pipex(pid_t pid, int f_fd, int c_fd)
 {
 	if (pid == 0)
 	{
@@ -28,7 +28,7 @@ static pid_t	ft_pipex(pid_t pid, int f_fd, int c_fd;)
 	return (pid);
 }
 
-static pid_t	ft_open(char **args, char **pipefd)
+static pid_t	ft_open(char **args)
 {
 	pid_t	pid;
 	int		f_fd;
@@ -40,7 +40,7 @@ static pid_t	ft_open(char **args, char **pipefd)
 		perror("file");
 		return (-1);
 	}
-	c_fd = open(args[4], O_WRONLY | O_CREAT | O_TRUNC);
+	c_fd = open(args[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (c_fd < 0)
 	{
 		close(f_fd);
@@ -48,7 +48,7 @@ static pid_t	ft_open(char **args, char **pipefd)
 		return (-1);
 	}
 	pid = fork();
-	if (!ft_pid_error(pid))
+	if (!ft_pid_error(pid, f_fd, c_fd))
 	{
 		close(c_fd);
 		close(f_fd);
@@ -57,22 +57,27 @@ static pid_t	ft_open(char **args, char **pipefd)
 	return (pid);
 }
 
-int	main(int argc, char **args, char **pipefd)
+int	main(int argc, char **args)
 {
 	pid_t	pid;
-	
+	int		*pipefd;
+
 	if (argc != 5)
 	{
 		errno = EINVAL;
-		ft_errors("Number of arguments");
+		return (ft_errors("Number of arguments"));
 	}
-	if (pipe(pipefd[2]) == -1)
+	pipefd = malloc(2 * sizeof(int));
+	if (!pipefd)
+		return (ft_errors("Malloc"));
+	if (pipe(pipefd) == -1)
 	{
 		perror("pipe");
 		return (1);
 	}
-	pid = ft_open(args, pipefd);
+	pid = ft_open(args);
 	if (pid < 0)
 		return (1);
+	free(pipefd);
 	waitpid()
 }

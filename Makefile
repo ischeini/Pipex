@@ -3,24 +3,28 @@ NAME = pipex
 LIB = libft/libft.a
 
 SRCDIR = ./
-OBJDIR = ./OBJ
+OBJDIR = obj/
 
 FLAGS = -Wall -Wextra -Werror
 
-SRC		=	${SRCDIR}pipex.c	\
+SRC		=	${SRCDIR}pipex.c		\
+			${SRCDIR}ft_errors.c	\
 
-OBJ		=	$(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
+OBJ	= $(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
-${NAME}: ${OBJDIR} ${OBJ}
-	@cc ${FLAGS} ${OBJ} -o ${NAME}
+all:${NAME}
+
+${LIB}:
+	@cd libft && make bonus
 
 ${OBJDIR}:
 	@mkdir -p $@
 
-${OBJDIR}%.o: ${SRCDIR}%.c
-	@cc ${FLAGS} ${LIB} -c $< -o $@
+${OBJDIR}%.o: ${SRCDIR}%.c | ${OBJDIR}
+	@cc ${FLAGS} -c $< -o $@
 
-all:${NAME}
+${NAME}: ${LIB} ${OBJDIR} ${OBJ}
+	@cc ${FLAGS} -o ${NAME} ${OBJ}
 
 bonus:
 

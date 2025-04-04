@@ -12,18 +12,18 @@
 
 #include "pipex.h"
 
-int	ft_pid_error(pid_t pid, int p_fd, int c_fd)
+int	ft_pid_error(pid_t pid, int f_fd, int c_fd)
 {
 	if (pid < 0)
 	{
-		close(p_fd);
+		close(f_fd);
 		close(c_fd);
 		return (0);
 	}
 	return (1);
 }
 
-int ft_errors(char *str)
+int	ft_errors(char *str)
 {
 	write(2, strerror(errno), strlen(strerror(errno)));
 	write(2, ": ", 2);

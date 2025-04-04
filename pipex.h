@@ -16,6 +16,8 @@
 # include <errno.h>
 # include <sys/wait.h>
 
-int	ft_errors(char *str);
+int		ft_pid_error(pid_t pid, int p_fd, int c_fd);
+
+int		ft_errors(char *str);
 
 # endif
