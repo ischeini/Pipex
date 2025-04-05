@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/10 17:37:54 by sscheini          #+#    #+#             */
-/*   Updated: 2025/03/17 17:09:21 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/05 21:19:49 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -185,7 +185,7 @@ void	ft_lstadd_back(t_list **lst, t_list *new);
 int		ft_lstsize(t_list *lst);
 
 /* Ft that free a poinetr of pointer char									*/
-int		ft_free_char(char **to_free);
+int		ft_free_char_pp(char **to_free);
 
 /* Ft strdup of char **														*/
 char	**ft_pstrdup(const char **s);

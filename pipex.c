@@ -12,49 +12,65 @@
 
 #include "pipex.h"
 
-static pid_t	ft_pipex(pid_t pid, int f_fd, int c_fd)
+static int	ft_exec_child(char **command_tmp)
 {
-	if (pid == 0)
+	if (execvp(command_tmp[0], command_tmp) == -1)
 	{
-		dup2(f_fd, STDIN_FILENO);
-		dup2(c_fd, STDOUT_FILENO);
-		close(f_fd);
-		close(c_fd);
-
-		exit(EXIT_SUCCESS);
+		perror("Execvp");
+		return (-1);
 	}
-	close(f_fd);
-	close(c_fd);
-	return (pid);
+	return (0);
 }
 
-static pid_t	ft_open(char **args)
+static pid_t	ft_check_child(char *input, char *command)
+{
+	char	**command_tmp;
+	int		input_fd;
+
+	input_fd = open(input, O_RDONLY);
+	if (input_fd < 0)
+	{
+		perror("Imput");
+		return (-1);
+	}
+	if (dup2(input_fd, STDIN_FILENO) == -1)
+	{
+		perror("Dup2");
+		close(input_fd);
+		return (-1);
+	}
+	close(input_fd);
+	command_tmp = malloc(2 * sizeof(char *));
+	if (!command_tmp)
+	{
+		perror("Command");
+		return (-1);
+	}
+	command_tmp[0] = command;
+	command_tmp[1] = NULL;
+	return (ft_exec_child(command_tmp));
+}
+
+static pid_t	ft_open(char **args, int *pipefd)
 {
 	pid_t	pid;
-	int		f_fd;
-	int		c_fd;
+	int		status;
 
-	f_fd = open(args[1], O_RDONLY);
-	if (f_fd < 0 )
-	{
-		perror("file");
-		return (-1);
-	}
-	c_fd = open(args[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (c_fd < 0)
-	{
-		close(f_fd);
-		perror("file");
-		return (-1);
-	}
+	status = 0;
 	pid = fork();
-	if (!ft_pid_error(pid, f_fd, c_fd))
+	if (pid < 0)
 	{
-		close(c_fd);
-		close(f_fd);
+		perror("Error fork");
 		return (-1);
 	}
-	return (pid);
+	if (pid == 0)
+	{
+		if (ft_check_child(args[1], args[2]) == -1)
+			return (-1);
+	}
+	close(pipefd[1]);
+	waitpid(pid, &status, 0);
+	return (0);
 }
 
 int	main(int argc, char **args)
@@ -65,19 +81,19 @@ int	main(int argc, char **args)
 	if (argc != 5)
 	{
 		errno = EINVAL;
-		return (ft_errors("Number of arguments"));
+		return (ft_errors("Number of arguments\n"));
 	}
 	pipefd = malloc(2 * sizeof(int));
 	if (!pipefd)
 		return (ft_errors("Malloc"));
 	if (pipe(pipefd) == -1)
 	{
-		perror("pipe");
+		perror("Pipe");
 		return (1);
 	}
-	pid = ft_open(args);
-	if (pid < 0)
-		return (1);
+	pid = ft_open(args, pipefd);
 	free(pipefd);
-	waitpid()
+	if (pid == -1)
+		return (1);
+	return (0);
 }

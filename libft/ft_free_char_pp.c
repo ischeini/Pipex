@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/16 14:25:04 by ischeini          #+#    #+#             */
-/*   Updated: 2025/03/29 12:02:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/05 21:19:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_free_char(char **to_free)
+int	ft_free_char_pp(char **to_free)
 {
 	int	i;
 
