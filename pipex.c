@@ -17,8 +17,10 @@ static int	ft_exec_child(char **command_tmp)
 	if (execvp(command_tmp[0], command_tmp) == -1)
 	{
 		perror("Execvp");
+		ft_free_char_pp(command_tmp);
 		return (-1);
 	}
+	ft_free_char_pp(command_tmp);
 	return (0);
 }
 
