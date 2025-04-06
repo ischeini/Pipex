@@ -12,90 +12,79 @@
 
 #include "pipex.h"
 
-static int	ft_exec_child(char **command_tmp)
+static void	ft_read_pipe(char *limiter, int fd_in, int fd_out)
 {
-	if (execvp(command_tmp[0], command_tmp) == -1)
+	char	*line;
+	char	*tmp;
+
+	while (1)
 	{
-		perror("Execvp");
-		ft_free_char_pp(command_tmp);
-		return (-1);
+		line = get_next_line(fd_in);
+		if (!line)
+			break ;
+		tmp = ft_strtrim(line, "\n");
+		if (ft_strncmp(tmp, limiter, ft_strlen(limiter) + 1) == 0)
+		{
+			free(tmp);
+			free(line);
+			break ;
+		}
+		ft_putstr_fd(line, fd_out);
+		free(tmp);
+		free(line);
 	}
-	ft_free_char_pp(command_tmp);
-	return (0);
 }
 
-static pid_t	ft_check_child(char *input, char *command)
+static int	ft_check(char **av, int *p)
 {
-	char	**command_tmp;
-	int		input_fd;
+	int	fd_tmp;
 
-	input_fd = open(input, O_RDONLY);
-	if (input_fd < 0)
+	fd_tmp = open(av[1], O_RDWR);
+	if (fd_tmp < 0)
 	{
-		perror("Imput");
+		perror("File open");
 		return (-1);
 	}
-	if (dup2(input_fd, STDIN_FILENO) == -1)
+	if (ft_strncmp(av[1], "infile.txt", 11) == 0)
 	{
-		perror("Dup2");
-		close(input_fd);
-		return (-1);
+		ft_read_pipe(av[2], fd_tmp, p[1]);
+		close(fd_tmp);
+		return (1);
 	}
-	close(input_fd);
-	command_tmp = malloc(2 * sizeof(char *));
-	if (!command_tmp)
+	else
 	{
-		perror("Command");
-		return (-1);
+		p[0] = fd_tmp;
+		return (0);
 	}
-	command_tmp[0] = command;
-	command_tmp[1] = NULL;
-	return (ft_exec_child(command_tmp));
 }
 
-static pid_t	ft_open(char **args, int *pipefd)
+int	main(int argc, char **args, char *envp[])
 {
-	pid_t	pid;
-	int		status;
-
-	status = 0;
-	pid = fork();
-	if (pid < 0)
-	{
-		perror("Error fork");
-		return (-1);
-	}
-	if (pid == 0)
-	{
-		if (ft_check_child(args[1], args[2]) == -1)
-			return (-1);
-	}
-	close(pipefd[1]);
-	waitpid(pid, &status, 0);
-	return (0);
-}
-
-int	main(int argc, char **args)
-{
-	pid_t	pid;
-	int		*pipefd;
+	int		pipefd1[2];
+	int		pipefd2[2];
+	int		fd;
+	int		i;
 
 	if (argc != 5)
 	{
 		errno = EINVAL;
-		return (ft_errors("Number of arguments\n"));
+		perror("Argc");
+		return (1);
 	}
-	pipefd = malloc(2 * sizeof(int));
-	if (!pipefd)
-		return (ft_errors("Malloc"));
-	if (pipe(pipefd) == -1)
+	ft_create_pipe(&pipefd1);
+	ft_create_pipe(&pipefd2);
+	fd = ft_check(args, &pipefd2);
+	if (fd == -1)
+		return (1);
+	i = 0;
+	while (i < argc - fd - 3)
 	{
-		perror("Pipe");
-		return (1);
+		if (i % 2 == 0)
+			ft_new_f_command(args[i + fd + 2], &pipefd1, &pipefd2, envp);
+		else
+			ft_new_c_command(args[i + fd + 2], &pipefd1, &pipefd2, envp);
+		i++;
 	}
-	pid = ft_open(args, pipefd);
-	free(pipefd);
-	if (pid == -1)
-		return (1);
+	ft_write_result(argc, args, pipefd1, pipefd2);
 	return (0);
 }

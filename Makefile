@@ -7,8 +7,8 @@ OBJDIR = obj/
 
 FLAGS = -Wall -Wextra -Werror
 
-SRC		=	${SRCDIR}pipex.c		\
-			${SRCDIR}ft_errors.c	\
+SRC		=	${SRCDIR}pipex.c			\
+			${SRCDIR}ft_pipex_utils.c	\
 
 OBJ	= $(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
@@ -24,7 +24,7 @@ ${OBJDIR}%.o: ${SRCDIR}%.c | ${OBJDIR}
 	@cc ${FLAGS} -c $< -o $@
 
 ${NAME}: ${LIB} ${OBJDIR} ${OBJ}
-	@cc ${FLAGS} -o ${NAME} ${OBJ}
+	@cc ${FLAGS} -o ${NAME} ${OBJ} ${LIB}
 
 bonus:
 
