@@ -12,50 +12,27 @@
 
 #include "pipex.h"
 
-static void	ft_read_pipe(char *limiter, int fd_in, int fd_out)
+static int	ft_check(char **args, int *pipefd)
 {
 	char	*line;
-	char	*tmp;
+	int		fd;
 
-	while (1)
-	{
-		line = get_next_line(fd_in);
-		if (!line)
-			break ;
-		tmp = ft_strtrim(line, "\n");
-		if (ft_strncmp(tmp, limiter, ft_strlen(limiter) + 1) == 0)
-		{
-			free(tmp);
-			free(line);
-			break ;
-		}
-		ft_putstr_fd(line, fd_out);
-		free(tmp);
-		free(line);
-	}
-}
-
-static int	ft_check(char **av, int *p)
-{
-	int	fd_tmp;
-
-	fd_tmp = open(av[1], O_RDWR);
-	if (fd_tmp < 0)
+	fd = open(args[1], O_RDWR);
+	if (fd < 0)
 	{
 		perror("File open");
 		return (-1);
 	}
-	if (ft_strncmp(av[1], "infile.txt", 11) == 0)
+	while (1)
 	{
-		ft_read_pipe(av[2], fd_tmp, p[1]);
-		close(fd_tmp);
-		return (1);
+		line = get_next_line(fd);
+		if (!line)
+			break ;
+		ft_putstr_fd(line, pipefd[1]);
+		free(line);
 	}
-	else
-	{
-		p[0] = fd_tmp;
-		return (0);
-	}
+	close(fd);
+	return (fd);
 }
 
 int	main(int argc, char **args, char *envp[])

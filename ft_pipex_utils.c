@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/06 15:05:41 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/06 16:31:04 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ char	*ft_get_exec(char *cmd, char **paths)
 {
 	char	*path;
 
-	if ((ft_strncmp(cmd, "./", 2) == 0) && access(cmd, X_OK) == 0)
-		return (ft_strdup(cmd));
 	while (*paths)
 	{
 		path = ft_strjoin(*paths, "/");
