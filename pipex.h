@@ -16,7 +16,17 @@
 # include <errno.h>
 # include <sys/wait.h>
 
+void	ft_new_command(char *cmd, int *p1, char **env);
+
+void	ft_pipe_exec(char *bin, int fd_in, int fd_out, char **env);
+
+void	ft_write_result(int argc, char **args, int *pipefd);
+
+char	*ft_get_exec(char *cmd, char **paths);
+
 int		ft_pid_error(pid_t pid, int p_fd, int c_fd);
+
+int		ft_create_pipe(int *pipex);
 
 int		ft_errors(char *str);
 

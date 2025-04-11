@@ -31,14 +31,14 @@ static int	ft_check(char **args, int *pipefd)
 		ft_putstr_fd(line, pipefd[1]);
 		free(line);
 	}
+	ft_putstr_fd("\0", pipefd[1]);
 	close(fd);
 	return (fd);
 }
 
 int	main(int argc, char **args, char *envp[])
 {
-	int		pipefd1[2];
-	int		pipefd2[2];
+	int		pipefd[2];
 	int		fd;
 	int		i;
 
@@ -48,20 +48,20 @@ int	main(int argc, char **args, char *envp[])
 		perror("Argc");
 		return (1);
 	}
-	ft_create_pipe(&pipefd1);
-	ft_create_pipe(&pipefd2);
-	fd = ft_check(args, &pipefd2);
+	if (ft_create_pipe(pipefd) == -1)
+	{
+		perror("Argc");
+		return (1);
+	}
+	fd = ft_check(args, pipefd);
 	if (fd == -1)
 		return (1);
 	i = 0;
 	while (i < argc - fd - 3)
 	{
-		if (i % 2 == 0)
-			ft_new_f_command(args[i + fd + 2], &pipefd1, &pipefd2, envp);
-		else
-			ft_new_c_command(args[i + fd + 2], &pipefd1, &pipefd2, envp);
+		ft_new_command(args[i + fd + 2], pipefd, envp);
 		i++;
 	}
-	ft_write_result(argc, args, pipefd1, pipefd2);
+	ft_write_result(argc, args, pipefd);
 	return (0);
 }
