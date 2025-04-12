@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/09 13:50:14 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/12 12:06:52 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ char	*ft_get_exec(char *cmd, char **paths)
 		path = ft_strjoin(path, cmd);
 		if (access(path, X_OK) == 0)
 			return (path);
+		free(path);
 		paths++;
 	}
 	perror("Execute");
@@ -29,21 +30,22 @@ char	*ft_get_exec(char *cmd, char **paths)
 	return (NULL);
 }
 
-void	ft_pipe_exec(char *bin, int fd_in, int fd_out, char **env)
+void	ft_pipe_exec(char *bin, int fd, int fileno, char **env)
 {
 	char	**env_tmp;
 	char	**args;
 	char	**paths;
 
-	if (dup2(fd_in, STDIN_FILENO) == -1 || dup2(fd_out, STDOUT_FILENO) == -1)
+	if (dup2(fd, fileno) == -1)
 	{
 		perror("Dup2");
 		return ;
 	}
+	close(fd);
 	env_tmp = env;
 	while (*env_tmp)
 	{
-		if (ft_strncmp(*env_tmp, "PATH", 4) == 0)
+		if (ft_strncmp(*env_tmp, "PATH=", 5) == 0)
 			break ;
 		env_tmp++;
 	}
@@ -66,7 +68,7 @@ int	ft_create_pipe(int *pipex)
 	return (0);
 }
 
-void	ft_new_command(char *cmd, int *p1, char **env)
+void	ft_new_command(char **args, int *p1, char **env, int i)
 {
 	int	pid;
 
@@ -78,8 +80,15 @@ void	ft_new_command(char *cmd, int *p1, char **env)
 	}
 	if (pid == 0)
 	{
-		close(p1[1]);
-		ft_pipe_exec(cmd, p1[1], p1[0], env);
+		if (i > 2)
+			ft_pipe_exec(args[i + 2], p1[0], STDIN_FILENO, env);
+		if (i < 2 - 1)
+			ft_pipe_exec(args[i + 2], p1[1], STDOUT_FILENO, env);
 	}
-	ft_create_pipe(p1);
+	else
+	{
+		close(p1[1]);
+		close(p1[0]);
+		wait(NULL);
+	}
 }
