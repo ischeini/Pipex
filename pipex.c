@@ -12,36 +12,42 @@
 
 #include "pipex.h"
 
-static int	ft_check(char **args, int *pipefd)
+void	ft_child_process(char **argv, char **envp, int *fd)
 {
-	char	*line;
-	int		fd;
+	int		filein;
 
-	fd = open(args[1], O_RDWR);
-	if (fd < 0)
+	filein = open(argv[1], O_RDONLY, 0777);
+	if (filein == -1)
 	{
-		perror("File open");
-		return (-1);
+		perror("Open");
+		exit(EXIT_FAILURE);
 	}
-	while (1)
+	dup2(fd[1], STDOUT_FILENO);
+	dup2(filein, STDIN_FILENO);
+	close(fd[0]);
+	ft_execute(argv[2], envp);
+}
+
+void	ft_parent_process(char **argv, char **envp, int *fd)
+{
+	int		fileout;
+
+	fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+	if (fileout == -1)
 	{
-		line = get_next_line(fd);
-		if (!line)
-			break ;
-		ft_putstr_fd(line, pipefd[1]);
-		free(line);
+		perror("Open");
+		exit(EXIT_FAILURE);
 	}
-	ft_putstr_fd("\0", pipefd[1]);
-	close(fd);
-	close(pipefd[1]);
-	return (fd);
+	dup2(fd[0], STDIN_FILENO);
+	dup2(fileout, STDOUT_FILENO);
+	close(fd[1]);
+	ft_execute(argv[3], envp);
 }
 
 int	main(int argc, char **args, char *envp[])
 {
-	int		pipefd[2];
-	int		fd;
-	int		i;
+	pid_t	pid;
+	int		fd[2];
 
 	if (argc != 5)
 	{
@@ -49,26 +55,20 @@ int	main(int argc, char **args, char *envp[])
 		perror("Argc");
 		return (1);
 	}
-	i = 0;
-	while (i < argc - 3)
+	if (pipe(fd) == -1)
 	{
-		if (1 > 0)
-		{
-			if (ft_create_pipe(pipefd) == -1)
-				return (1);
-		}
-		if (i == 0)
-		{
-			fd = ft_check(args, pipefd);
-			if (fd == -1)
-				return (1);
-		}
-		else
-			close (pipefd[1]);
-		ft_new_command(args, pipefd, envp, i + 2);
-		close(pipefd[0]);
-		i++;
+		perror("Pipe");
+		return (1);
 	}
-	ft_write_result(argc, args, pipefd);
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Fork");
+		return (1);
+	}
+	if (pid == 0)
+		ft_child_process(args, envp, fd);
+	waitpid(pid, NULL, 0);
+	ft_parent_process(args, envp, fd);
 	return (0);
 }

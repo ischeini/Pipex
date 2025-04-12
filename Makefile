@@ -1,4 +1,3 @@
-
 NAME = pipex
 
 LIB = libft/libft.a
@@ -10,7 +9,6 @@ FLAGS = -Wall -Wextra -Werror
 
 SRC		=	${SRCDIR}pipex.c			\
 			${SRCDIR}ft_pipex_utils.c	\
-			${SRCDIR}ft_pipex_write.c	\
 
 OBJ	= $(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 
