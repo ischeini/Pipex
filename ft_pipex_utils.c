@@ -6,11 +6,19 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/14 11:41:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:01:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
+
+void	ft_error(char *str)
+{
+	if(!errno)
+		errno = EINVAL;
+	perror(str);
+	exit(EXIT_FAILURE);
+}
 
 char	*ft_find_path(char *cmd, char **envp)
 {
@@ -42,18 +50,22 @@ void	ft_execute(char *argv, char **envp)
 {
 	char	**cmd;
 	char	*path;
+	int		i;
 	
+	i = 0;
 	cmd = ft_split(argv, ' ');
-	path = ft_find_path(cmd[0], envp);
-	if (!path)	
+	if (!cmd)
+		ft_error("Split");
+	while (cmd[i])
+	{
+		path = ft_find_path(cmd[i], envp);
+		i++;
+	}
+	if (!path)
 	{
 		ft_free_char_pp(cmd);
-		perror("Path");
-		exit(EXIT_FAILURE);
+		ft_error("Path");
 	}
 	if (execve(path, cmd, envp) == -1)
-	{
-		perror("Execve");
-		exit(EXIT_FAILURE);
-	}
+		ft_error("Execve");
 }
