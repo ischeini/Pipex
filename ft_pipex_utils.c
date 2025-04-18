@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/12 18:06:26 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/14 11:41:32 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,17 +41,13 @@ char	*ft_find_path(char *cmd, char **envp)
 void	ft_execute(char *argv, char **envp)
 {
 	char	**cmd;
-	int 	i;
 	char	*path;
 	
-	i = -1;
 	cmd = ft_split(argv, ' ');
 	path = ft_find_path(cmd[0], envp);
 	if (!path)	
 	{
-		while (cmd[++i])
-			free(cmd[i]);
-		free(cmd);
+		ft_free_char_pp(cmd);
 		perror("Path");
 		exit(EXIT_FAILURE);
 	}
