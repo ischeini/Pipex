@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/18 20:01:17 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/22 10:35:56 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ char	*ft_find_path(char *cmd, char **envp)
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
 		if (access(path, F_OK) == 0)
+		{
+			ft_free_char_pp(paths);
 			return (path);
+		}
 		free(path);
 		i++;
 	}
@@ -59,6 +62,8 @@ void	ft_execute(char *argv, char **envp)
 	while (cmd[i])
 	{
 		path = ft_find_path(cmd[i], envp);
+		if (path)
+			break ;
 		i++;
 	}
 	if (!path)

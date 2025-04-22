@@ -26,7 +26,9 @@ static void	ft_command_process(char *argv, char **envp)
 	{
 		close(fd[0]);
 		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
 		ft_execute(argv, envp);
+		exit(EXIT_SUCCESS);
 	}
 	else
 	{
@@ -89,7 +91,7 @@ int	main(int argc, char **args, char *envp[])
 	int	fdin;
 	int	i;
 
-	if (argc != 5)
+	if (argc < 5)
 		ft_error("Open");
 	if (ft_strncmp(args[1], "here_doc", 8) == 0)
 	{
