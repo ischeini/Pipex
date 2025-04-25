@@ -34,7 +34,6 @@ static void	ft_command_process(char *argv, char **envp)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		waitpid(pid, NULL, 0);
 	}
 }
 
@@ -54,16 +53,14 @@ static int	ft_open_file(char *argv, int i)
 	return (file);
 }
 
-static void	ft_here_doc(char *limiter, int	here_doc, int argc)
+static void	ft_here_doc(char *limiter, int here_doc, int argc)
 {
 	pid_t	reader;
 	int		fd[2];
 	char	*line;
 
-	if (argc < 6)
-		ft_error("Arc");
-	if (pipe(fd) == -1)
-		ft_error("Pipe");
+	if (pipe(fd) == -1 || argc < 6)
+		ft_error("Here_doc");
 	reader = fork();
 	if (reader == 0)
 	{
@@ -81,7 +78,6 @@ static void	ft_here_doc(char *limiter, int	here_doc, int argc)
 	{
 		close(fd[1]);
 		dup2(fd[0], STDIN_FILENO);
-		wait(NULL);
 	}
 }
 
@@ -106,9 +102,7 @@ int	main(int argc, char **args, char *envp[])
 		fdin = ft_open_file(args[1], 2);
 		dup2(fdin, STDIN_FILENO);
 	}
-	while (i < (argc - 2))
+	while (i < (argc - 1))
 		ft_command_process(args[i++], envp);
-	dup2(fdout, STDOUT_FILENO);
-	ft_execute(args[argc - 2], envp);
 	return (0);
 }

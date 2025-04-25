@@ -18,8 +18,6 @@
 
 void	ft_execute(char *argv, char **envp);
 
-char	*ft_find_path(char *cmd, char **envp);
-
 void	ft_error(char *str);
 
-# endif
+#endif
