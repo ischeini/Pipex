@@ -61,7 +61,7 @@ static void	ft_here_doc(char *limiter, int	here_doc, int argc)
 	char	*line;
 
 	if (argc < 6)
-		ft_error("Argc");
+		ft_error("Arc");
 	if (pipe(fd) == -1)
 		ft_error("Pipe");
 	reader = fork();
@@ -71,7 +71,7 @@ static void	ft_here_doc(char *limiter, int	here_doc, int argc)
 		line = get_next_line(here_doc);
 		while (line)
 		{
-			if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
+			if (ft_strncmp(line, limiter, ft_strlen(limiter - 1)) == 0)
 				exit(EXIT_SUCCESS);
 			write(fd[1], line, ft_strlen(line));
 			line = get_next_line(here_doc);
