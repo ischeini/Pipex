@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/25 18:36:32 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/04/27 16:48:42 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,17 +30,17 @@ static char	*ft_find_command(char **paths, char *cmd)
 	while (paths[i])
 	{
 		part_path = ft_strjoin(paths[i], "/");
+		if (!part_path)
+			return (NULL);
 		path = ft_strjoin(part_path, cmd);
 		free(part_path);
+		if (!path)
+			return (NULL);
 		if (access(path, X_OK) == 0)
-		{
-			ft_free_char_pp(paths);
 			return (path);
-		}
 		free(path);
 		i++;
 	}
-	ft_free_char_pp(paths);
 	return (NULL);
 }
 
@@ -58,22 +58,23 @@ static int	ft_path_exist(char **envp)
 	return (-1);
 }
 
-static char	*ft_find_path(char *cmd, char **envp)
+char	*ft_find_path(char *cmd, char **envp)
 {
 	char	**paths;
 	char	*path;
 	int		i;
 
 	i = ft_path_exist(envp);
-	if (i == -1)
+	if (i == -1 || (!cmd || cmd[0] == '\0'))
 		return (NULL);
 	if ((cmd[0] == '/' || (cmd[0] == '.' && cmd[1] == '/'))
 		&& access(cmd, X_OK) == 0)
-		return (cmd);
+		return (ft_strdup(cmd));
 	paths = ft_split(envp[i] + 5, ':');
 	if (!paths)
 		return (NULL);
 	path = ft_find_command(paths, cmd);
+	ft_free_char_pp(paths);
 	return (path);
 }
 

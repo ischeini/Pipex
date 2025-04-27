@@ -12,6 +12,24 @@
 
 #include "pipex.h"
 
+
+
+static int	ft_wait_child(pid_t pid)
+{
+	int	status;
+	int	exit_status;
+
+	status = 0;
+	waitpid(pid, &status, WNOHANG);
+	if (WIFEXITED(status))
+	{
+		exit_status = WEXITSTATUS(status);
+		if (exit_status != 0)
+			ft_error("Inside child");
+	}
+	return (0);
+}
+
 static void	ft_child_process(char **argv, char **envp, int *fd)
 {
 	int		filein;
@@ -25,6 +43,7 @@ static void	ft_child_process(char **argv, char **envp, int *fd)
 	dup2(filein, STDIN_FILENO);
 	close(filein);
 	ft_execute(argv[2], envp);
+	exit(0)
 }
 
 static void	ft_parent_process(char **argv, char **envp, int *fd)
@@ -44,6 +63,7 @@ static void	ft_parent_process(char **argv, char **envp, int *fd)
 		dup2(fileout, STDOUT_FILENO);
 		close(fileout);
 		ft_execute(argv[3], envp);
+		exit(0)
 	}
 	else
 		wait(NULL);
@@ -56,6 +76,8 @@ int	main(int argc, char **argv, char *envp[])
 
 	if (argc != 5)
 		ft_error("Argc");
+	if (!ft_command_exist(argv, envp, (argc - 1)))
+		ft_error("Command");
 	if (pipe(fd) == -1)
 		ft_error("Pipe");
 	pid = fork();
@@ -64,7 +86,10 @@ int	main(int argc, char **argv, char *envp[])
 	if (pid == 0)
 		ft_child_process(argv, envp, fd);
 	else
+	{
+		ft_wait_child(pid);
 		ft_parent_process(argv, envp, fd);
+	}
 	close(fd[0]);
 	close(fd[1]);
 	return (0);

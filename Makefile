@@ -6,13 +6,15 @@ LIB = libft/libft.a
 SRCDIR = ./
 OBJDIR = obj/
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 SRC		=	${SRCDIR}pipex.c			\
 			${SRCDIR}ft_pipex_utils.c	\
+			${SRCDIR}ft_pipex_utils2.c	\
 
 BSRC	=	${SRCDIR}pipex_bonus.c		\
 			${SRCDIR}ft_pipex_utils.c	\
+			${SRCDIR}ft_pipex_utils2.c	\
 
 OBJ	= $(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 BOBJ = $(BSRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
