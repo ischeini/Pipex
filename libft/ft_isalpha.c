@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 13:09:58 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/14 18:31:02 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/10 13:09:58 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:56:37 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

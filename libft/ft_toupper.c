@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_toupper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/14 19:45:14 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/14 20:49:38 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/14 19:45:14 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:58:29 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

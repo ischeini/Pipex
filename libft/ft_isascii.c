@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 17:46:25 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/15 12:45:31 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/10 17:46:25 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:56:41 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isdigit.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 16:54:53 by sscheini          #+#    #+#             */
-/*   Updated: 2024/09/15 19:31:31 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/10 16:54:53 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:56:43 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

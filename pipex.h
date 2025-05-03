@@ -22,6 +22,16 @@ void	ft_error(char *str);
 
 char	*ft_find_path(char *cmd, char **envp);
 
+char	*ft_basename_command(char *path);
+
+int		ft_execute_command(char *commands, char *envp[], int *fd, int in);
+
 int		ft_command_exist(char **argv, char *envp[], int size);
+
+int		ft_close(int fd1, int fd2);
+
+int		ft_wait_child(pid_t pid);
+
+int		ft_fork(void);
 
 #endif

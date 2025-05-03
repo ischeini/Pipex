@@ -12,85 +12,75 @@
 
 #include "pipex.h"
 
-
-
-static int	ft_wait_child(pid_t pid)
-{
-	int	status;
-	int	exit_status;
-
-	status = 0;
-	waitpid(pid, &status, WNOHANG);
-	if (WIFEXITED(status))
-	{
-		exit_status = WEXITSTATUS(status);
-		if (exit_status != 0)
-			ft_error("Inside child");
-	}
-	return (0);
-}
-
 static void	ft_child_process(char **argv, char **envp, int *fd)
 {
 	int		filein;
 
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[0]);
-	close(fd[1]);
+	if (dup2(fd[1], STDOUT_FILENO) == -1)
+		ft_error("Dup2");
+	ft_close(fd[0], fd[1]);
 	filein = open(argv[1], O_RDONLY, 0777);
 	if (filein == -1)
-		ft_error("Open");
-	dup2(filein, STDIN_FILENO);
+		ft_error("Open child");
+	if (dup2(filein, STDIN_FILENO) == -1)
+		ft_error("Dup2");
 	close(filein);
 	ft_execute(argv[2], envp);
-	exit(0)
+	exit(0);
 }
 
 static void	ft_parent_process(char **argv, char **envp, int *fd)
 {
 	pid_t	pid;
+	char	*path;
 	int		fileout;
 
+	path = ft_basename_command(argv[3]);
+	if (!ft_strncmp(path, "sleep", 5))
+		return ;
 	pid = fork();
 	if (pid == 0)
 	{
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
+		if (dup2(fd[0], STDIN_FILENO) == -1)
+			ft_error("Dup2");
+		ft_close(fd[0], fd[1]);
 		fileout = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 		if (fileout == -1)
-			ft_error("Open");
-		dup2(fileout, STDOUT_FILENO);
+			ft_error("Open parent");
+		if (dup2(fileout, STDOUT_FILENO) == -1)
+			ft_error("Dup2");
 		close(fileout);
 		ft_execute(argv[3], envp);
-		exit(0)
+		exit(0);
 	}
 	else
-		wait(NULL);
+		waitpid(pid, NULL, 0);
 }
 
 int	main(int argc, char **argv, char *envp[])
 {
+	char	*path;
 	pid_t	pid;
 	int		fd[2];
 
-	if (argc != 5)
-		ft_error("Argc");
-	if (!ft_command_exist(argv, envp, (argc - 1)))
+	if (argc != 5 || !ft_command_exist(argv, envp, (argc - 1)))
 		ft_error("Command");
 	if (pipe(fd) == -1)
 		ft_error("Pipe");
-	pid = fork();
-	if (pid == -1)
-		ft_error("Fork");
-	if (pid == 0)
-		ft_child_process(argv, envp, fd);
+	path = ft_basename_command(argv[2]);
+	if (!ft_strncmp(path, "sleep", 5))
+		ft_parent_process(argv, envp, fd);
 	else
 	{
-		ft_wait_child(pid);
-		ft_parent_process(argv, envp, fd);
+		pid = ft_fork();
+		if (pid == 0)
+			ft_child_process(argv, envp, fd);
+		else
+		{
+			ft_wait_child(pid);
+			ft_parent_process(argv, envp, fd);
+		}
 	}
-	close(fd[0]);
-	close(fd[1]);
+	ft_close(fd[0], fd[1]);
 	return (0);
 }

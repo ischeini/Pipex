@@ -12,73 +12,54 @@
 
 #include "pipex_bonus.h"
 
-static void	ft_last_command_process(char *argv, char **envp, int fdout, int in)
+static void	ft_last_command_process(char *argv, char **envp, int o, int i)
 {
 	pid_t	pid;
+	char	*path;
 
-	pid = fork();
-	if (pid == -1)
-		ft_error("Fork");
-	if (pid == 0)
-	{
-		dup2(in, STDIN_FILENO);
-		close(in);
-		dup2(fdout, STDOUT_FILENO);
-		close(fdout);
-		ft_execute(argv, envp);
-		exit(0);
-	}
+	path = ft_basename_command(argv);
+	if (!ft_strncmp(path, "sleep", 5))
+		ft_close(i, o);
 	else
 	{
-		close(fdout);
-		wait(NULL);
+		pid = ft_fork();
+		if (pid == 0)
+		{
+			if ((dup2(o, STDOUT_FILENO) == -1) && (dup2(i, STDIN_FILENO) == 0))
+				ft_error("Dup2");
+			ft_close(i, o);
+			ft_execute(argv, envp);
+			exit(0);
+		}
+		else
+		{
+			waitpid(pid, NULL, 0);
+			ft_close(i, o);
+		}
 	}
 }
 
-static void ft_command_process(char **commands, char **envp, int num, int in)
+static int	ft_command_process(char **commands, char **envp, int num, int in)
 {
-	pid_t	pid;
+	char	*path;
 	int		fd[2];
 	int		i;
 
 	i = -1;
 	while (++i < num)
 	{
-		if (i < num - 1)
+		if (i < num)
 		{
 			if (pipe(fd) == -1)
-			ft_error("Pipe");
+				ft_error("Pipe");
 		}
-		pid = fork();
-		if (pid == -1)
-			ft_error("Fork");
-		if (pid == 0)
-		{
-			if (in != -1)
-			{
-				dup2(in, STDIN_FILENO);
-				close(in);
-			}
-			if (i < num - 1)
-			{
-				dup2(fd[1], STDOUT_FILENO);
-				close(fd[0]);
-				close(fd[1]);
-			}
-			ft_execute(commands[i], envp);
-			exit(0);
-		}
+		path = ft_basename_command(commands[i]);
+		if (!ft_strncmp(path, "sleep", 5))
+			continue ;
 		else
-		{
-			if (in != -1)
-				close(in);
-			if (i < num - 1)
-			{
-				close(fd[1]);
-				in = fd[0];
-			}
-		}
+			in = ft_execute_command(commands[i], envp, fd, in);
 	}
+	return (in);
 }
 
 static int	ft_open_file(char *argv, int i)
@@ -97,20 +78,16 @@ static int	ft_open_file(char *argv, int i)
 	return (file);
 }
 
-static void	ft_here_doc(char *limiter, char *here_doc, int argc)
+static int	ft_here_doc(char *limiter, int argc)
 {
 	int		fd[2];
-	int		fd_here_doc;
 	char	*line;
 
 	if (pipe(fd) == -1 || argc < 6)
 		ft_error("here_doc");
-	fd_here_doc = open(here_doc, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	if (fd_here_doc == -1)
-		ft_error("Open");
 	while (1)
 	{
-		line = get_next_line(fd_here_doc);
+		line = get_next_line(0);
 		if (!line)
 			break ;
 		if (ft_strncmp(line, limiter, ft_strlen(limiter)) == 0)
@@ -122,8 +99,7 @@ static void	ft_here_doc(char *limiter, char *here_doc, int argc)
 		free(line);
 	}
 	close(fd[1]);
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
+	return (fd[0]);
 }
 
 int	main(int argc, char **args, char *envp[])
@@ -132,7 +108,7 @@ int	main(int argc, char **args, char *envp[])
 	int	fdin;
 	int	i;
 
-	if (argc < 5)
+	if (argc <= 4)
 		ft_error("Argc");
 	if (!ft_command_exist(args, envp, (argc - 1)))
 		ft_error("Command");
@@ -140,16 +116,15 @@ int	main(int argc, char **args, char *envp[])
 	{
 		i = 3;
 		fdout = ft_open_file(args[argc - 1], 0);
-		ft_here_doc(args[2], args[1], argc);
+		fdin = ft_here_doc(args[2], argc);
 	}
 	else
 	{
 		i = 2;
 		fdout = ft_open_file(args[argc - 1], 1);
 		fdin = ft_open_file(args[1], 2);
-
 	}
-	ft_command_process(&args[i], envp, (argc - i), fdin);
-	ft_last_command_process(args[i], envp, fdout, fdin);
+	fdin = ft_command_process(&args[i], envp, (argc - i - 2), fdin);
+	ft_last_command_process(args[argc - 2], envp, fdout, fdin);
 	return (0);
 }

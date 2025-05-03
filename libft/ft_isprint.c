@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/10 17:32:30 by sscheini          #+#    #+#             */
-/*   Updated: 2024/10/18 17:28:40 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/10 17:32:30 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:56:45 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

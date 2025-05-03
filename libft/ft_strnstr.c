@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/15 13:48:27 by sscheini          #+#    #+#             */
-/*   Updated: 2024/10/17 17:18:18 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/15 13:48:27 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:58:17 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sscheini <sscheini@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/25 16:28:59 by sscheini          #+#    #+#             */
-/*   Updated: 2024/10/17 17:17:40 by sscheini         ###   ########.fr       */
+/*   Created: 2024/09/25 16:28:59 by ischeini          #+#    #+#             */
+/*   Updated: 2025/05/03 14:57:49 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
