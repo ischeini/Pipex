@@ -9,11 +9,13 @@ OBJDIR = obj/
 FLAGS = -Wall -Wextra -Werror -g
 
 SRC		=	${SRCDIR}pipex.c			\
+			${SRCDIR}ft_pipex_utils0.c	\
 			${SRCDIR}ft_pipex_utils1.c	\
 			${SRCDIR}ft_pipex_utils2.c	\
 			${SRCDIR}ft_pipex_utils3.c	\
 
 BSRC	=	${SRCDIR}pipex_bonus.c		\
+			${SRCDIR}ft_pipex_utils0.c	\
 			${SRCDIR}ft_pipex_utils1.c	\
 			${SRCDIR}ft_pipex_utils2.c	\
 			${SRCDIR}ft_pipex_utils3.c	\
