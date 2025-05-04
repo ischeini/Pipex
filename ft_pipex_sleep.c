@@ -58,12 +58,27 @@ static void	ft_sleep_command(char **argv, char *envp[])
 static void	ft_check_sleep(char **argv, char *envp[], int j)
 {
 	pid_t	pid;
+	char	*path;
+	int		sleep;
+	int		i;
 
-	pid = ft_fork();
-	if (pid == 0)
-		ft_sleep_command(&argv[j], envp);
-	else
-		wait(NULL);
+	sleep = 0;
+	i = 0;
+	while (argv[i])
+	{
+		path = ft_basename_command(argv[i]);
+		if (!ft_strncmp(path, "sleep", 5))
+			sleep += 1;
+		i++;
+	}
+	if (sleep > 0)
+	{
+		pid = ft_fork();
+		if (pid == 0)
+			ft_sleep_command(&argv[j], envp);
+		else
+			wait(NULL);
+	}
 }
 
 int	ft_command_exist(char **argv, char *envp[], int size)
