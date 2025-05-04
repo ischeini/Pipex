@@ -14,14 +14,16 @@
 
 int	main(int argc, char **argv, char *envp[])
 {
-	int	fdout;
-	int	fdin;
+	int		fdout;
+	int		fdin;
+	int		i;
 
+	i = 1;
 	if (argc != 5 || !ft_command_exist(argv, envp, (argc - 1)))
 		ft_error("Command");
 	fdout = ft_open_file(argv[4], 1);
 	fdin = ft_open_file(argv[1], 2);
-	fdin = ft_command_process(&argv[2], envp, 1, fdin);
+	fdin = ft_command_process(&argv[2], envp, i, fdin);
 	ft_last_command_process(argv[3], envp, fdout, fdin);
 	return (0);
 }

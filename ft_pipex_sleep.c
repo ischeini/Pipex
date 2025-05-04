@@ -12,22 +12,6 @@
 
 #include "pipex.h"
 
-char	*ft_basename_command(char *path)
-{
-	char	*base;
-	char	*p;
-
-	base = path;
-	p = path;
-	while (*p != '\0')
-	{
-		if (*p == '/')
-			base = p + 1;
-		p++;
-	}
-	return (base);
-}
-
 static int	ft_time(char *argv, int time)
 {
 	char	**split;
@@ -67,6 +51,8 @@ static void	ft_sleep_command(char **argv, char *envp[])
 	}
 	if (ft_strnstr(argv[sleep], "sleep", ft_strlen(argv[sleep])))
 		ft_execute(argv[sleep], envp);
+	else
+		exit(0);
 }
 
 static void	ft_check_sleep(char **argv, char *envp[], int j)
@@ -99,7 +85,7 @@ int	ft_command_exist(char **argv, char *envp[], int size)
 		path = ft_find_path(cmd[0], envp);
 		ft_free_char_pp(cmd);
 		if (!path)
-			return (0);
+			ft_error("Commands");
 		free(path);
 	}
 	ft_check_sleep(argv, envp, j);

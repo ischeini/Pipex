@@ -36,8 +36,6 @@ int		ft_open_file(char *argv, int i);
 
 int		ft_close(int fd1, int fd2);
 
-int		ft_wait_child(pid_t pid);
-
 int		ft_fork(void);
 
 #endif

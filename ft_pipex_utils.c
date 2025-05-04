@@ -6,7 +6,7 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 18:53:26 by ischeini          #+#    #+#             */
-/*   Updated: 2025/05/03 19:03:39 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:24:36 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,22 @@ int	ft_close(int fd1, int fd2)
 	close(fd1);
 	close(fd2);
 	return (1);
+}
+
+pid_t	ft_fork(void)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+		ft_error("Pid");
+	return (pid);
+}
+
+void	ft_error(char *str)
+{
+	if (!errno)
+		errno = EINVAL;
+	perror(str);
+	exit(errno);
 }

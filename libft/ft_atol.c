@@ -6,13 +6,13 @@
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 12:38:46 by ischeini          #+#    #+#             */
-/*   Updated: 2025/05/03 14:56:08 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:22:51 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-/* Ft_atoi returns an INT with the first number found on a CHAR *.	*/
+/* Ft_atoi returns an LONG with the first number found on a CHAR *.	*/
 long	ft_atol(const char *nptr, long *n)
 {
 	long	sign;

@@ -8,17 +8,17 @@ OBJDIR = obj/
 
 FLAGS = -Wall -Wextra -Werror -g
 
-SRC		=	${SRCDIR}pipex.c			\
-			${SRCDIR}ft_pipex_utils0.c	\
-			${SRCDIR}ft_pipex_utils1.c	\
-			${SRCDIR}ft_pipex_utils2.c	\
-			${SRCDIR}ft_pipex_utils3.c	\
+SRC		=	${SRCDIR}pipex.c				\
+			${SRCDIR}ft_pipex_commands.c	\
+			${SRCDIR}ft_pipex_paths.c		\
+			${SRCDIR}ft_pipex_sleep.c		\
+			${SRCDIR}ft_pipex_utils.c		\
 
-BSRC	=	${SRCDIR}pipex_bonus.c		\
-			${SRCDIR}ft_pipex_utils0.c	\
-			${SRCDIR}ft_pipex_utils1.c	\
-			${SRCDIR}ft_pipex_utils2.c	\
-			${SRCDIR}ft_pipex_utils3.c	\
+BSRC	=	${SRCDIR}pipex_bonus.c			\
+			${SRCDIR}ft_pipex_commands.c	\
+			${SRCDIR}ft_pipex_paths.c		\
+			${SRCDIR}ft_pipex_sleep.c		\
+			${SRCDIR}ft_pipex_utils.c		\
 
 OBJ	= $(SRC:$(SRCDIR)%.c=$(OBJDIR)%.o)
 BOBJ = $(BSRC:$(SRCDIR)%.c=$(OBJDIR)%.o)

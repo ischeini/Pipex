@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_pipex_utils.c                                   :+:      :+:    :+:   */
+/*   ft_pipex_utils1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ischeini <ischeini@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/06 13:08:16 by ischeini          #+#    #+#             */
-/*   Updated: 2025/04/28 10:33:12 by ischeini         ###   ########.fr       */
+/*   Updated: 2025/05/04 13:26:18 by ischeini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	ft_error(char *str)
+char	*ft_basename_command(char *path)
 {
-	if (!errno)
-		errno = EINVAL;
-	perror(str);
-	exit(errno);
+	char	*base;
+	char	*p;
+
+	base = path;
+	p = path;
+	while (*p != '\0')
+	{
+		if (*p == '/')
+			base = p + 1;
+		p++;
+	}
+	return (base);
 }
+
 
 static char	*ft_find_command(char **paths, char *cmd)
 {
@@ -78,31 +87,3 @@ char	*ft_find_path(char *cmd, char **envp)
 	return (path);
 }
 
-void	ft_execute(char *argv, char **envp)
-{
-	char	**cmd;
-	char	*path;
-	int		i;
-
-	i = -1;
-	cmd = ft_split(argv, ' ');
-	if (!cmd)
-		ft_error("Split");
-	path = NULL;
-	while (i++ && cmd[i])
-	{
-		path = ft_find_path(cmd[i], envp);
-		if (!path)
-		{
-			ft_free_char_pp(cmd);
-			ft_error("Path");
-		}
-		if (path)
-			break ;
-	}
-	if (execve(path, cmd, envp) == -1)
-	{
-		ft_free_char_pp(cmd);
-		ft_error("Execve");
-	}
-}
